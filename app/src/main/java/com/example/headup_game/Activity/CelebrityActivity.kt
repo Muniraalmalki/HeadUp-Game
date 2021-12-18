@@ -23,12 +23,12 @@ import retrofit2.Response
 
 class CelebrityActivity : AppCompatActivity() {
 
-    private var celebCount = 0
-    lateinit var celebs: Celebrity
+    private var celebrityCount = 0
+    lateinit var celebrity: Celebrity
     lateinit var landscapeLayout: LinearLayout
     lateinit var portraitLayout: ConstraintLayout
     lateinit var timerTextView: TextView
-    lateinit var celebTextViews: List<TextView>
+    lateinit var celebrityTextViews: List<TextView>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_celebrity)
@@ -37,7 +37,7 @@ class CelebrityActivity : AppCompatActivity() {
         portraitLayout = findViewById(R.id.portrait_layout)
         timerTextView = findViewById(R.id.tvTimer)
 
-        setCelebs()
+        getAllCelebrity()
         startTimer()
     }
 
@@ -49,13 +49,13 @@ class CelebrityActivity : AppCompatActivity() {
             landscapeLayout.visibility = VISIBLE
         }
         else {
-            ++celebCount
+            ++celebrityCount
             landscapeLayout.visibility = INVISIBLE
             portraitLayout.visibility = VISIBLE
         }
     }
 
-    private fun setCelebs() {
+    private fun getAllCelebrity() {
         val apiInterface = APIClient().getClient()?.create(APIInterface::class.java)
         apiInterface!!.getAllCelebrity()?.enqueue(object: Callback<Celebrity?> {
 
@@ -65,24 +65,24 @@ class CelebrityActivity : AppCompatActivity() {
             }
 
             override fun onResponse(call: Call<Celebrity?>, response: Response<Celebrity?>) {
-                celebs = response.body()!!
+                celebrity = response.body()!!
 
             }
         })
     }
 
     private fun updateCelebViews() {
-        celebTextViews = listOf (
+        celebrityTextViews = listOf (
             findViewById(R.id.tvCelebName),
             findViewById(R.id.tvCelebTaboo1),
             findViewById(R.id.tvCelebTaboo2),
             findViewById(R.id.tvCelebTaboo3)
         )
-        val currentCeleb = celebs[celebCount]
-        celebTextViews[0].text = currentCeleb.name
-        celebTextViews[1].text = currentCeleb.taboo1
-        celebTextViews[2].text = currentCeleb.taboo2
-        celebTextViews[3].text = currentCeleb.taboo3
+        val currentCelebrity = celebrity[celebrityCount]
+        celebrityTextViews[0].text = currentCelebrity.name
+        celebrityTextViews[1].text = currentCelebrity.taboo1
+        celebrityTextViews[2].text = currentCelebrity.taboo2
+        celebrityTextViews[3].text = currentCelebrity.taboo3
     }
 
     private fun startTimer() {
